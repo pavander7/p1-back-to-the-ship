@@ -53,7 +53,7 @@ int main (int argc, char* argv[]) {
                 } else routing_mode = 'q';
                 break;
             case 'o' :
-                output_mode = char(optarg);
+                output_mode = *optarg;
                 if (!(output_mode == 'M' || output_mode == 'L')) {
                     cerr << "Invalid output mode specified\n";
                     exit(1);
