@@ -6,6 +6,15 @@
 
 using namespace std;
 
+bool valid_space(char val) {
+    if (val == '.') return true;
+    else if (val == '#') return true;
+    else if (val == 'S') return true;
+    else if (val == 'H') return true;
+    else if (val == 'E') return true;
+    else return false;
+}
+
 Station::Station(bool mode) {
     char input_mode;
     size_t levels, N;
@@ -36,13 +45,4 @@ Station::Station(bool mode) {
             grid.push_back(temp_level);
         }
     }
-    }
-
-bool valid_space(char val) {
-    if (val == '.') return true;
-    else if (val == '#') return true;
-    else if (val == 'S') return true;
-    else if (val == 'H') return true;
-    else if (val == 'E') return true;
-    else return false;
 }
