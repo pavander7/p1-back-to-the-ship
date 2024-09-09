@@ -68,5 +68,12 @@ int main (int argc, char* argv[]) {
         exit(1);
     }
 
-    Station loc((routing_mode == 's'));
+    Station station((routing_mode == 's'));
+
+    station.solve();
+    
+    if (output_mode == 'M') station.mapOut();
+    else station.listOut();
+
+    return 0;
 }
