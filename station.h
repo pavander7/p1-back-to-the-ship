@@ -11,24 +11,35 @@
 
 class Station {
 public:
-    Station(bool mode);
+    Station(bool mode_in);
+    void solve();
 
+    void mapOut();
+    void listOut();
 private:
-    bool mode;
-    std::vector<std::vector<std::vector<char>>> grid;
     size_t start_l, start_r, start_c;
-    class SearchContainer;
+    //size_t target_l, target_r, target_c;
+
+    std::vector<std::vector<std::vector<char>>> grid;
+    std::vector<std::vector<std::vector<bool>>> d_grid;
+    std::deque<Vertex*> backtrace;
+
+    SearchContainer searchBot;
+
+    bool discover(size_t l, size_t r, size_t c, Vertex* p);
+    bool investigate(Vertex* loc);
 };
 
-class Station::SearchContainer {
+class SearchContainer {
 public:
-    SearchContainer(bool mode);
+    SearchContainer(bool mode_in);
     void push(Vertex*);
-    Vertex* top();
     void pop();
+
+    Vertex* top();
+    bool empty();
 private:
     std::deque<Vertex*> container;
-    std::deque<Vertex*> backtrace;
     bool mode;
 };
 
