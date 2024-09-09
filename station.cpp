@@ -76,6 +76,9 @@ Station::Station(bool mode_in) : searchBot(mode_in) {
                             start_r = r;
                             start_c = c;
                         }
+                    } else {
+                        cerr << "Invalid map character";
+                        exit(1);
                     }
                 }
                 temp_level.push_back(temp_row);
@@ -111,19 +114,34 @@ Station::Station(bool mode_in) : searchBot(mode_in) {
             while (line[0] == '/') {
                 getline(cin, line);
             }
-            size_t level = line[1];
-            size_t q = 3;
+            size_t level;
+            size_t q = 1;
+            while (line[q] != ',') {
+                level *= 10;
+                level += line[q];
+                q++;
+            } if (level > levels) {
+                cerr << "Invalid map level";
+                exit(1);
+            }
             size_t row = 0;
             while (line[q] != ',') {
                 row *= 10;
                 row += line[q];
                 q++;
-            } q++;
+            } if (row > N) {
+                cerr << "Invalid map row";
+                exit(1);
+            }
+            q++;
             size_t col = 0;
             while (line[q] != ',') {
                 col *= 10;
                 col += line[q];
                 q++;
+            } if (col > N) {
+                cerr << "Invalid map column";
+                exit(1);
             } q++;
             char val = line[q];
             if (valid_space(val)) {
@@ -133,6 +151,9 @@ Station::Station(bool mode_in) : searchBot(mode_in) {
                     start_r = row;
                     start_c = col;
                 }
+            } else {
+                cerr << "Invalid map character";
+                exit(1);
             }
         }
     }
