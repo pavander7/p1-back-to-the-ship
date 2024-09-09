@@ -7,14 +7,29 @@
 #include <queue>
 #include <deque>
 #include <vector>
+#include "vertex.h"
 
 class Station {
 public:
-Station(bool mode);
+    Station(bool mode);
 
 private:
-bool mode;
-std::vector<std::vector<std::vector<char>>> grid;
+    bool mode;
+    std::vector<std::vector<std::vector<char>>> grid;
+    size_t start_l, start_r, start_c;
+    class SearchContainer;
+};
+
+class Station::SearchContainer {
+public:
+    SearchContainer(bool mode);
+    void push(Vertex*);
+    Vertex* top();
+    void pop();
+private:
+    std::deque<Vertex*> container;
+    std::deque<Vertex*> backtrace;
+    bool mode;
 };
 
 #endif
