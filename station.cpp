@@ -38,6 +38,11 @@ Station::Station(bool mode) {
                     row_in >> temp_char;
                     if (valid_space(temp_char)) {
                         temp_row.push_back(temp_char);
+                        if (temp_char == 'S') {
+                            start_l = l;
+                            start_r = r;
+                            start_c = c;
+                        }
                     }
                 }
                 temp_level.push_back(temp_row);
@@ -78,7 +83,15 @@ Station::Station(bool mode) {
                 q++;
             } q++;
             char val = line[q];
-            grid[level][row][col] = val;
+            if (valid_space(val)) {
+                grid[level][row][col] = val;
+                if (val == 'S') {
+                    start_l = level;
+                    start_r = row;
+                    start_c = col;
+                }
+            }
         }
     }
 }
+
