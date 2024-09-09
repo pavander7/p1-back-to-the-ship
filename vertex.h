@@ -10,7 +10,6 @@
 
 struct Vertex {
     size_t lev, row, col;
-    char val;
     Vertex *prev;
 };
 
