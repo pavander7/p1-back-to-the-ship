@@ -17,6 +17,29 @@ bool valid_space(char val) {
     else return false;
 }
 
+struct Node {
+    size_t l, r, c;
+    char prev;
+};
+
+vector<Node> makePath(Vertex* curr) {
+    vector<Node> path;
+    path.push_back({curr->lev, curr->row, curr->col, 'H'});
+    Vertex* prev = curr;
+    curr = curr->prev;
+    while (curr->prev != nullptr) {
+        char p;
+        if (prev->lev != curr->lev) p = prev->lev;
+        else if (prev->row < curr->row) p = 'w';
+        else if (prev->row > curr->row) p = 'e';
+        else if (prev->col < curr->col) p = 'n';
+        else p = 's';
+        path.push_back({curr->lev, curr->row, curr->col, });
+        prev = curr;
+        curr = curr->prev;
+    }
+}
+
 // Station
 
 Station::Station(bool mode_in) : searchBot(mode_in) {
@@ -158,6 +181,40 @@ bool Station::investigate(Vertex* loc) {
     } return end;
 }
 
+void Station::listOut() {
+    Vertex* curr = backtrace.back();
+    vector<Node> path = makePath(curr);
+    cout << "//path taken\n";
+    for (auto &loc : path) {
+        cout << '(' << loc.l << ',' << loc.r << ',' << loc.c << ',' << loc.prev << ')' << endl;
+    }
+}
+
+void Station::mapOut() {
+    Vertex* curr = backtrace.back();
+    vector<Node> path = makePath(curr);
+    for (auto &loc : path) {
+        grid[loc.l][loc.r][loc.c] = loc.prev;
+    }
+    cout << "Start in level " << start_l << ", row " << start_r << ", column " << start_c << endl;
+    for (size_t l = 0; l < grid.size(); l++) {
+        cout << "//level " << l << endl;
+        for (size_t r = 0; r < grid[l].size(); r++) {
+            for (size_t c = 0; c < grid[l][r].size(); c++) {
+                cout << grid[l][r][c];
+            } cout << endl;
+        } 
+    }
+}
+
+Station::~Station() {
+    while (!backtrace.empty()) {
+        Vertex* curr = backtrace.front();
+        backtrace.pop_front();
+        delete curr;
+    }
+}
+
 // SearchContainer
 
 SearchContainer::SearchContainer(bool mode_in) : mode(mode_in) {}
@@ -171,4 +228,12 @@ Vertex* SearchContainer::top() {return container.front();}
 void SearchContainer::push(Vertex* val) {
     if (mode) container.push_front(val);
     else container.push_back(val);
+}
+
+SearchContainer::~SearchContainer() {
+    while (!container.empty()) {
+        Vertex* curr = container.front();
+        container.pop_front();
+        delete curr;
+    }
 }

@@ -16,6 +16,8 @@ public:
 
     void mapOut();
     void listOut();
+
+    ~Station();
 private:
     size_t start_l, start_r, start_c;
     //size_t target_l, target_r, target_c;
@@ -38,6 +40,8 @@ public:
 
     Vertex* top();
     bool empty();
+
+    ~SearchContainer();
 private:
     std::deque<Vertex*> container;
     bool mode;
