@@ -31,31 +31,31 @@ int main (int argc, char* argv[]) {
         switch(c) {
             case 'h' :
                 cout << "USAGE: ./ship\n" 
-                     << "Routing Mode: \n"
+                     << "Routing Mode:\n"
                      << "   -s/--stack (DFS)\n"
                      << "   -q/--queue (BFS)\n"
-                     << "Output Format: \n"
+                     << "Output Format:\n"
                      << "   -o/--output (M|L)\n"
                      << "       M: map format (default)\n"
-                     << "       L: coordinate list format \n";
+                     << "       L: coordinate list format\n";
                 exit(0);
                 break;
             case 's' :
                 if (routing_mode != 0) {
-                    cerr << "Multiple routing modes specified\n";
+                    cerr << "Multiple routing modes specified";
                     exit(1);
                 } else routing_mode = 's';
                 break;
             case 'q' :
                 if (routing_mode != 0) {
-                    cerr << "Multiple routing modes specified\n";
+                    cerr << "Multiple routing modes specified";
                     exit(1);
                 } else routing_mode = 'q';
                 break;
             case 'o' :
                 output_mode = *optarg;
                 if (!(output_mode == 'M' || output_mode == 'L')) {
-                    cerr << "Invalid output mode specified\n";
+                    cerr << "Invalid output mode specified";
                     exit(1);
                 }
                 break;
@@ -64,7 +64,7 @@ int main (int argc, char* argv[]) {
     }
 
     if (routing_mode == 0) {
-        cerr << "No routing mode specified\n";
+        cerr << "No routing mode specified";
         exit(1);
     }
 
