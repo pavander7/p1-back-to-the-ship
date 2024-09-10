@@ -8,6 +8,7 @@
 #include <deque>
 #include <vector>
 #include "vertex.h"
+#include "search.h"
 
 class Station {
 public:
@@ -30,21 +31,6 @@ private:
 
     bool discover(size_t l, size_t r, size_t c, Vertex* p);
     bool investigate(Vertex* loc);
-};
-
-class SearchContainer {
-public:
-    SearchContainer(bool mode_in);
-    void push(Vertex*);
-    void pop();
-
-    Vertex* top();
-    bool empty();
-
-    ~SearchContainer();
-private:
-    std::deque<Vertex*> container;
-    bool mode;
 };
 
 #endif

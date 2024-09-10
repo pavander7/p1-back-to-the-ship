@@ -29,12 +29,12 @@ vector<Node> makePath(Vertex* curr) {
     curr = curr->prev;
     while (curr->prev != nullptr) {
         char p;
-        if (prev->lev != curr->lev) p = prev->lev;
+        if (prev->lev != curr->lev) p = char(prev->lev);
         else if (prev->row < curr->row) p = 'w';
         else if (prev->row > curr->row) p = 'e';
         else if (prev->col < curr->col) p = 'n';
         else p = 's';
-        path.push_back({curr->lev, curr->row, curr->col, });
+        path.push_back({curr->lev, curr->row, curr->col, p});
         prev = curr;
         curr = curr->prev;
     }
@@ -118,7 +118,7 @@ Station::Station(bool mode_in) : searchBot(mode_in) {
             size_t q = 1;
             while (line[q] != ',') {
                 level *= 10;
-                level += line[q];
+                level += static_cast<size_t>(line[q] - '0');
                 q++;
             } if (level > levels) {
                 cerr << "Invalid map level";
@@ -127,7 +127,7 @@ Station::Station(bool mode_in) : searchBot(mode_in) {
             size_t row = 0;
             while (line[q] != ',') {
                 row *= 10;
-                row += line[q];
+                row += static_cast<size_t>(line[q] - '0');
                 q++;
             } if (row > N) {
                 cerr << "Invalid map row";
@@ -137,7 +137,7 @@ Station::Station(bool mode_in) : searchBot(mode_in) {
             size_t col = 0;
             while (line[q] != ',') {
                 col *= 10;
-                col += line[q];
+                col += static_cast<size_t>(line[q] - '0');
                 q++;
             } if (col > N) {
                 cerr << "Invalid map column";
@@ -232,29 +232,6 @@ Station::~Station() {
     while (!backtrace.empty()) {
         Vertex* curr = backtrace.front();
         backtrace.pop_front();
-        delete curr;
-    }
-}
-
-// SearchContainer
-
-SearchContainer::SearchContainer(bool mode_in) : mode(mode_in) {}
-
-bool SearchContainer::empty() {return container.empty();}
-
-void SearchContainer::pop() {container.pop_front();}
-
-Vertex* SearchContainer::top() {return container.front();}
-
-void SearchContainer::push(Vertex* val) {
-    if (mode) container.push_front(val);
-    else container.push_back(val);
-}
-
-SearchContainer::~SearchContainer() {
-    while (!container.empty()) {
-        Vertex* curr = container.front();
-        container.pop_front();
         delete curr;
     }
 }
