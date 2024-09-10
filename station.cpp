@@ -37,7 +37,7 @@ vector<Node> makePath(Vertex* curr) {
         path.push_back({curr->lev, curr->row, curr->col, p});
         prev = curr;
         curr = curr->prev;
-    }
+    } return path;
 }
 
 // Station
@@ -114,7 +114,7 @@ Station::Station(bool mode_in) : searchBot(mode_in) {
             while (line[0] == '/') {
                 getline(cin, line);
             }
-            size_t level;
+            size_t level = 0;
             size_t q = 1;
             while (line[q] != ',') {
                 level *= 10;
@@ -180,7 +180,7 @@ bool Station::discover(size_t l, size_t r, size_t c, Vertex* p) {
         searchBot.push(val);
         d_grid[l][r][c] = true;
         return false;
-    }
+    } return false;
 }
 
 bool Station::investigate(Vertex* loc) {
