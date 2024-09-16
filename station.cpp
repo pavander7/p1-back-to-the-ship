@@ -27,17 +27,18 @@ vector<Node> makePath(Vertex* curr) {
     path.push_back({curr->lev, curr->row, curr->col, 'H'});
     Vertex* prev = curr;
     curr = curr->prev;
-    while (curr->prev != nullptr) {
+    while (curr != nullptr) {
         char p;
-        if (prev->lev != curr->lev) p = char(prev->lev);
-        else if (prev->row < curr->row) p = 'w';
-        else if (prev->row > curr->row) p = 'e';
-        else if (prev->col < curr->col) p = 'n';
-        else p = 's';
+        if (prev->lev != curr->lev) p = char(prev->lev + size_t(48));
+        else if (prev->row < curr->row) p = 'n';
+        else if (prev->row > curr->row) p = 's';
+        else if (prev->col < curr->col) p = 'w';
+        else p = 'e';
         path.push_back({curr->lev, curr->row, curr->col, p});
         prev = curr;
         curr = curr->prev;
-    } return path;
+    }
+    return path;
 }
 
 // Station
@@ -45,8 +46,9 @@ vector<Node> makePath(Vertex* curr) {
 Station::Station(bool mode_in) : searchBot(mode_in) {
     char input_mode;
     size_t levels, N;
-    cin >> input_mode >> levels >> N;
     string line;
+    cin >> input_mode >> levels >> N;
+    getline(cin, line);
     if (input_mode == 'M') { // Map input
         this->grid.reserve(levels);
         this->d_grid.reserve(levels);
@@ -122,8 +124,10 @@ Station::Station(bool mode_in) : searchBot(mode_in) {
                 q++;
             } if (level > levels) {
                 cerr << "Invalid map level";
+                cerr << ": " << level;
                 exit(1);
             }
+            q++;
             size_t row = 0;
             while (line[q] != ',') {
                 row *= 10;
@@ -170,16 +174,17 @@ void Station::solve() {
 }
 
 bool Station::discover(size_t l, size_t r, size_t c, Vertex* p) {
-    if (grid[l][r][c] == 'H') {
-        Vertex* val = new Vertex({l,r,c,p});
-        backtrace.push_back(val);
-        return true;
-    }
-    else if (grid[l][r][c] != '#') {
-        Vertex* val = new Vertex({l,r,c,p});
-        searchBot.push(val);
-        d_grid[l][r][c] = true;
-        return false;
+    if (!d_grid[l][r][c]) {
+        if (grid[l][r][c] == 'H') {
+            Vertex* val = new Vertex({l,r,c,p});
+            backtrace.push_back(val);
+            return true;
+        }
+        else if (grid[l][r][c] != '#') {
+            Vertex* val = new Vertex({l,r,c,p});
+            searchBot.push(val);
+            d_grid[l][r][c] = true;
+        }
     } return false;
 }
 
@@ -187,15 +192,15 @@ bool Station::investigate(Vertex* loc) {
     bool end = false;
     if (loc->row > 0) {
         if (discover(loc->lev, loc->row - size_t(1), loc->col, loc)) end = true;
-    } if (loc->col < grid[0].size()) {
+    } if (loc->col < grid[0].size() - size_t(1)) {
         if (discover(loc->lev, loc->row, loc->col + size_t(1), loc)) end = true;
-    } if (loc->row < grid[0].size()) {
+    } if (loc->row < grid[0].size() - size_t(1)) {
         if (discover(loc->lev, loc->row + size_t(1), loc->col, loc)) end = true;
     } if (loc->col > 0) {
         if (discover(loc->lev, loc->row, loc->col - size_t(1), loc)) end = true;
     } if (grid[loc->lev][loc->row][loc->col] == 'E') {
         for (size_t l = 0; l < grid.size(); l++) {
-            if (grid[l][loc->row][loc->col] == 'E') {
+            if (l != loc->lev && grid[l][loc->row][loc->col] == 'E') {
                 if(discover(l, loc->row, loc->col, loc)) end = true;
             }
         }
@@ -206,7 +211,8 @@ void Station::listOut() {
     Vertex* curr = backtrace.back();
     vector<Node> path = makePath(curr);
     cout << "//path taken\n";
-    for (auto &loc : path) {
+    for (size_t p = 1; p < path.size(); p++) {
+        auto loc = path[path.size() - p];
         cout << '(' << loc.l << ',' << loc.r << ',' << loc.c << ',' << loc.prev << ')' << endl;
     }
 }
