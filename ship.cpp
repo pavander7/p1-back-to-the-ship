@@ -24,7 +24,7 @@ int main (int argc, char* argv[]) {
 
     //variables for input processing
     char routing_mode = 0;
-    char output_mode = 0;
+    char output_mode = 'M';
 
     int c = getopt_long(argc, argv, "sqo:h", long_options, &option_index);
     while (c != -1) {
@@ -70,10 +70,15 @@ int main (int argc, char* argv[]) {
 
     Station station((routing_mode == 's'));
 
-    station.solve();
-    
-    if (output_mode == 'M') station.mapOut();
-    else station.listOut();
+    if (station.solve()) {
+        if (output_mode == 'M') station.mapOut();
+        else station.listOut();
+    } else {
+        if (output_mode == 'M') station.blank_mapOut();
+        else {
+            cout << "//path taken\n";
+        }
+    }
 
     return 0;
 }

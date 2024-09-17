@@ -163,14 +163,14 @@ Station::Station(bool mode_in) : searchBot(mode_in) {
     }
 }
 
-void Station::solve() {
+bool Station::solve() {
     discover(start_l, start_r, start_c, nullptr);
     while (!searchBot.empty()) {
         auto curr = searchBot.top();
         searchBot.pop();
         backtrace.push_back(curr);
-        if (investigate(curr)) break;
-    }
+        if (investigate(curr)) return true;
+    } return false;
 }
 
 bool Station::discover(size_t l, size_t r, size_t c, Vertex* p) {
@@ -223,6 +223,18 @@ void Station::mapOut() {
     for (auto &loc : path) {
         grid[loc.l][loc.r][loc.c] = loc.prev;
     }
+    cout << "Start in level " << start_l << ", row " << start_r << ", column " << start_c << endl;
+    for (size_t l = 0; l < grid.size(); l++) {
+        cout << "//level " << l << endl;
+        for (size_t r = 0; r < grid[l].size(); r++) {
+            for (size_t c = 0; c < grid[l][r].size(); c++) {
+                cout << grid[l][r][c];
+            } cout << endl;
+        } 
+    }
+}
+
+void Station::blank_mapOut() {
     cout << "Start in level " << start_l << ", row " << start_r << ", column " << start_c << endl;
     for (size_t l = 0; l < grid.size(); l++) {
         cout << "//level " << l << endl;

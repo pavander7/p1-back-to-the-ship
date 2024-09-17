@@ -13,10 +13,11 @@
 class Station {
 public:
     Station(bool mode_in);
-    void solve();
+    bool solve();
 
     void mapOut();
     void listOut();
+    void blank_mapOut();
 
     ~Station();
 private:
